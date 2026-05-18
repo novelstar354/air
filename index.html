@@ -1,0 +1,959 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>STAR AIRLINES | Beyond The Sky</title>
+<link rel="icon" href="airline.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700&family=Noto+Sans+JP:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+<style>
+*{
+margin:0;
+padding:0;
+box-sizing:border-box;
+}
+
+html{
+scroll-behavior:smooth;
+}
+
+body{
+font-family:'Noto Sans JP',sans-serif;
+background:#050816;
+color:white;
+overflow-x:hidden;
+}
+
+body::-webkit-scrollbar{
+width:10px;
+}
+
+body::-webkit-scrollbar-thumb{
+background:#4da3ff;
+border-radius:20px;
+}
+
+header{
+transition:transform 0.35s ease;
+position:fixed;
+top:0;
+left:0;
+width:100%;
+height:80px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+padding:0 50px;
+background:rgba(0,0,0,0.45);
+backdrop-filter:blur(15px);
+z-index:1000;
+border-bottom:1px solid rgba(255,255,255,0.1);
+}
+
+.logo{
+display:flex;
+align-items:center;
+gap:15px;
+font-family:'Orbitron',sans-serif;
+font-size:1.5rem;
+font-weight:700;
+letter-spacing:2px;
+}
+
+.logo img{
+width:45px;
+height:45px;
+}
+
+.hamburger{
+position:fixed;
+top:18px;
+right:20px;
+width:55px;
+height:55px;
+border-radius:50%;
+background:rgba(0,0,0,0.55);
+backdrop-filter:blur(12px);
+border:1px solid rgba(255,255,255,0.15);
+display:none;
+flex-direction:column;
+align-items:center;
+justify-content:center;
+gap:6px;
+cursor:pointer;
+z-index:1500;
+}
+
+.hamburger span{
+width:24px;
+height:3px;
+background:white;
+border-radius:10px;
+}
+
+.mobile-menu{
+position:fixed;
+top:0;
+right:-320px;
+width:280px;
+height:100vh;
+background:#091120;
+padding:100px 30px;
+display:flex;
+flex-direction:column;
+gap:25px;
+transition:0.35s;
+z-index:1400;
+border-left:1px solid rgba(255,255,255,0.08);
+}
+
+.mobile-menu.active{
+right:0;
+}
+
+.mobile-menu a{
+color:white;
+text-decoration:none;
+font-size:1.1rem;
+font-weight:700;
+}
+
+nav{
+display:flex;
+gap:30px;
+}
+
+nav a{
+text-decoration:none;
+color:white;
+font-weight:500;
+transition:0.3s;
+position:relative;
+}
+
+nav a::after{
+content:'';
+position:absolute;
+left:0;
+bottom:-6px;
+width:0%;
+height:2px;
+background:#6eb8ff;
+transition:0.3s;
+}
+
+nav a:hover::after{
+width:100%;
+}
+
+.hero{
+height:100vh;
+background:
+linear-gradient(rgba(0,0,0,0.45),rgba(0,0,0,0.7)),
+url('https://images.unsplash.com/photo-1436491865332-7a61a109cc05?q=80&w=1600&auto=format&fit=crop');
+background-size:cover;
+background-position:center;
+display:flex;
+align-items:center;
+padding:0 8%;
+}
+
+.hero-content{
+max-width:700px;
+}
+
+.hero h1{
+font-size:5rem;
+font-family:'Orbitron',sans-serif;
+line-height:1.1;
+margin-bottom:20px;
+text-shadow:0 0 20px rgba(255,255,255,0.3);
+}
+
+.hero p{
+font-size:1.2rem;
+line-height:1.8;
+color:#d7e9ff;
+margin-bottom:40px;
+}
+
+.buttons{
+display:flex;
+gap:20px;
+flex-wrap:wrap;
+}
+
+.btn{
+padding:16px 30px;
+border:none;
+border-radius:50px;
+font-size:1rem;
+font-weight:700;
+cursor:pointer;
+transition:0.3s;
+text-decoration:none;
+display:inline-flex;
+align-items:center;
+justify-content:center;
+}
+
+.primary{
+background:linear-gradient(135deg,#3b82f6,#7dd3fc);
+color:white;
+box-shadow:0 0 20px rgba(59,130,246,0.5);
+}
+
+.primary:hover{
+transform:translateY(-4px) scale(1.03);
+}
+
+.secondary{
+background:rgba(255,255,255,0.08);
+border:1px solid rgba(255,255,255,0.2);
+color:white;
+backdrop-filter:blur(10px);
+}
+
+.secondary:hover{
+background:rgba(255,255,255,0.16);
+}
+
+section{
+padding:120px 8%;
+}
+
+.section-title{
+font-size:3rem;
+font-family:'Orbitron',sans-serif;
+margin-bottom:20px;
+}
+
+.section-sub{
+color:#b8c7d9;
+margin-bottom:50px;
+line-height:1.8;
+max-width:800px;
+}
+
+.cards{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(260px,1fr));
+gap:25px;
+}
+
+.card{
+background:rgba(255,255,255,0.06);
+border:1px solid rgba(255,255,255,0.08);
+border-radius:25px;
+padding:30px;
+backdrop-filter:blur(12px);
+transition:0.3s;
+}
+
+.card:hover{
+transform:translateY(-10px);
+box-shadow:0 10px 40px rgba(0,0,0,0.4);
+}
+
+.card h3{
+margin-bottom:15px;
+font-size:1.5rem;
+}
+
+.card p{
+line-height:1.8;
+color:#c9d7e8;
+}
+
+.search-section{
+background:linear-gradient(180deg,#08111f,#101d36);
+}
+
+.flight-box{
+background:rgba(255,255,255,0.06);
+padding:40px;
+border-radius:30px;
+border:1px solid rgba(255,255,255,0.08);
+backdrop-filter:blur(12px);
+max-width:1000px;
+margin:auto;
+}
+
+.form-grid{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+margin-bottom:30px;
+}
+
+.input-group{
+display:flex;
+flex-direction:column;
+gap:10px;
+}
+
+.input-group label{
+font-weight:700;
+}
+
+.input-group input,
+.input-group select{
+padding:16px;
+border-radius:15px;
+border:none;
+background:rgba(255,255,255,0.08);
+color:white;
+font-size:1rem;
+outline:none;
+}
+
+.input-group option{
+background:#091120;
+}
+
+.result-box{
+margin-top:30px;
+display:none;
+}
+
+.flight-result{
+background:rgba(255,255,255,0.05);
+padding:25px;
+border-radius:20px;
+margin-bottom:20px;
+border:1px solid rgba(255,255,255,0.08);
+display:flex;
+justify-content:space-between;
+align-items:center;
+flex-wrap:wrap;
+gap:20px;
+}
+
+.seat-section{
+background:#050816;
+}
+
+.aircraft{
+max-width:1100px;
+margin:auto;
+background:rgba(255,255,255,0.05);
+padding:40px;
+border-radius:30px;
+border:1px solid rgba(255,255,255,0.08);
+}
+
+.legend{
+display:flex;
+gap:20px;
+margin-bottom:30px;
+flex-wrap:wrap;
+}
+
+.legend div{
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.dot{
+width:20px;
+height:20px;
+border-radius:5px;
+}
+
+.available{
+background:#3b82f6;
+}
+
+.selected{
+background:#10b981;
+}
+
+.occupied{
+background:#374151;
+}
+
+.seat-map{
+display:grid;
+grid-template-columns:repeat(7,1fr);
+gap:12px;
+justify-items:center;
+}
+
+.seat{
+width:55px;
+height:55px;
+border-radius:12px;
+background:#3b82f6;
+display:flex;
+align-items:center;
+justify-content:center;
+font-weight:700;
+cursor:pointer;
+transition:0.2s;
+}
+
+.seat:hover{
+transform:scale(1.08);
+}
+
+.seat.selected{
+background:#10b981;
+}
+
+.seat.occupied{
+background:#374151;
+cursor:not-allowed;
+}
+
+.aisle{
+visibility:hidden;
+}
+
+footer{
+padding:40px 8%;
+text-align:center;
+background:#02040b;
+color:#8ea1b8;
+border-top:1px solid rgba(255,255,255,0.08);
+}
+
+.top-btn{
+position:fixed;
+right:20px;
+bottom:20px;
+width:60px;
+height:60px;
+border:none;
+border-radius:50%;
+background:linear-gradient(135deg,#3b82f6,#60a5fa);
+color:white;
+font-size:1.5rem;
+cursor:pointer;
+box-shadow:0 0 20px rgba(59,130,246,0.5);
+display:none;
+z-index:999;
+}
+
+@media(max-width:768px){
+header{
+padding:0 20px;
+}
+
+.hero h1{
+font-size:3rem;
+}
+
+nav{
+display:none;
+}
+
+.section-title{
+font-size:2.3rem;
+}
+
+.seat{
+width:38px;
+height:38px;
+font-size:0.8rem;
+}
+}
+/* 追加 */
+
+.menu-overlay{
+position:fixed;
+inset:0;
+background:rgba(0,0,0,0.35);
+backdrop-filter:blur(8px);
+opacity:0;
+pointer-events:none;
+transition:0.3s;
+z-index:1300;
+}
+
+.menu-overlay.active{
+opacity:1;
+pointer-events:auto;
+}
+
+.mobile-menu{
+position:fixed;
+top:0;
+right:-320px;
+width:280px;
+height:100vh;
+background:#091120;
+padding:100px 30px;
+display:flex;
+flex-direction:column;
+gap:25px;
+transition:0.35s;
+z-index:1400;
+border-left:1px solid rgba(255,255,255,0.08);
+}
+
+.mobile-menu.active{
+right:0;
+}
+
+.mobile-menu a{
+color:white;
+text-decoration:none;
+font-size:1.1rem;
+font-weight:700;
+padding-bottom:8px;
+position:relative;
+transition:0.3s;
+width:fit-content;
+}
+
+.mobile-menu a::after{
+content:'';
+position:absolute;
+left:0;
+bottom:0;
+width:0%;
+height:2px;
+background:#6eb8ff;
+transition:0.3s;
+}
+
+.mobile-menu a:hover{
+color:#8cc8ff;
+}
+
+.mobile-menu a:hover::after{
+width:100%;
+}
+</style>
+</head>
+<body>
+
+<div class="hamburger" id="hamburger">
+<span></span>
+<span></span>
+<span></span>
+</div>
+
+<!-- これを追加 -->
+<div class="menu-overlay" id="menuOverlay"></div>
+
+<div class="mobile-menu" id="mobileMenu">
+<a href="#home">HOME</a>
+<a href="#flights">FLIGHT SEARCH</a>
+<a href="#seats">SEAT MAP</a>
+<a href="#booking">BOOK</a>
+</div>
+
+<div class="mobile-menu" id="mobileMenu">
+<a href="#home">HOME</a>
+<a href="#flights">FLIGHT SEARCH</a>
+<a href="#seats">SEAT MAP</a>
+<a href="#booking">BOOK</a>
+</div>
+
+<header id="header">
+<div class="logo">
+<img src="airline.png">
+<span>STAR AIRLINES</span>
+</div>
+
+<nav>
+<a href="#home">HOME</a>
+<a href="#flights">FLIGHT SEARCH</a>
+<a href="#seats">SEAT MAP</a>
+</nav>
+</header>
+
+<section class="hero" id="home">
+<div class="hero-content">
+<h1>BEYOND<br>THE SKY</h1>
+<p>
+STAR AIRLINES はスター帝国を代表する次世代航空会社です。<br>
+最先端の機体と快適なサービスで、未来の空へ。
+</p>
+
+<div class="buttons">
+<a href="#flights" class="btn primary">FLIGHT SEARCH</a>
+<a href="#seats" class="btn secondary">VIEW SEATS</a>
+</div>
+</div>
+</section>
+
+<section>
+<h2 class="section-title">ABOUT STAR AIRLINES</h2>
+<p class="section-sub">
+STAR AIRLINES はスター帝国最大のフラッグキャリア航空会社です。未来的な機体、世界最高水準のサービス、宇宙港接続ネットワークを備え、帝国内外を結ぶ次世代エアラインとして知られています。
+</p>
+
+<div class="cards">
+<div class="card">
+<h3>GLOBAL NETWORK</h3>
+<p>
+スターシティから宇宙軌道ターミナルまで、広大な路線ネットワークを展開。
+</p>
+</div>
+
+<div class="card">
+<h3>FUTURE CABIN</h3>
+<p>
+静音設計キャビン・スマート照明・AIサポートを標準搭載。
+</p>
+</div>
+
+<div class="card">
+<h3>SPACE CONNECT</h3>
+<p>
+STAR SPACE と連携し、宇宙港アクセス便も運航しています。
+</p>
+</div>
+</div>
+</section>
+
+<section>
+<h2 class="section-title">PREMIUM EXPERIENCE</h2>
+<p class="section-sub">
+快適性・スピード・未来感を融合した、新時代の航空サービス。
+</p>
+
+<div class="cards">
+<div class="card">
+<h3>IMPERIAL FIRST</h3>
+<p>
+完全個室型スイート。スター帝国最高級の機内体験。
+</p>
+</div>
+
+<div class="card">
+<h3>GALAXY BUSINESS</h3>
+<p>
+フルフラットシートとラウンジアクセスを提供。
+</p>
+</div>
+
+<div class="card">
+<h3>SMART ECONOMY</h3>
+<p>
+快適な座席設計と高速機内Wi‑Fiを標準搭載。
+</p>
+</div>
+</div>
+</section>
+
+<section class="search-section" id="flights">
+<h2 class="section-title">FLIGHT SEARCH</h2>
+<p class="section-sub">
+スター帝国内および宇宙港路線を検索できます。
+</p>
+
+<div class="flight-box">
+<div class="form-grid">
+<div class="input-group">
+<label>FROM</label>
+<select id="from">
+<option>STAR CITY</option>
+<option>NEO TOKYO</option>
+<option>LUNA PORT</option>
+<option>MARS GATE</option>
+<option>SKYHARBOR</option>
+<option>NOVA ISLAND</option>
+<option>AURORA BAY</option>
+<option>ORBIT TERMINAL</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>TO</label>
+<select id="to">
+<option>NEO TOKYO</option>
+<option>STAR CITY</option>
+<option>LUNA PORT</option>
+<option>MARS GATE</option>
+<option>SKYHARBOR</option>
+<option>NOVA ISLAND</option>
+<option>AURORA BAY</option>
+<option>ORBIT TERMINAL</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>DATE</label>
+<input type="date" id="date">
+</div>
+
+<div class="input-group">
+<label>CLASS</label>
+<select id="class">
+<option value="1">ECONOMY</option>
+<option value="2">BUSINESS</option>
+<option value="4">IMPERIAL FIRST</option>
+</select>
+</div>
+
+<div class="input-group">
+<label>PASSENGERS</label>
+<select id="passengers">
+<option value="1">1 Passenger</option>
+<option value="2">2 Passengers</option>
+<option value="3">3 Passengers</option>
+<option value="4">4 Passengers</option>
+<option value="5">5 Passengers</option>
+</select>
+</div>
+</div>
+
+<button class="btn primary" onclick="searchFlights()">SEARCH FLIGHTS</button>
+
+<div class="result-box" id="results"></div>
+</div>
+</section>
+
+
+
+<section class="seat-section" id="seats">
+<h2 class="section-title">SEAT MAP</h2>
+<p class="section-sub">
+STARJET X‑9 の座席を選択できます。
+</p>
+
+<div class="aircraft">
+<div class="legend">
+<div><span class="dot available"></span> Available</div>
+<div><span class="dot selected"></span> Selected</div>
+<div><span class="dot occupied"></span> Occupied</div>
+</div>
+
+<div class="seat-map" id="seatMap"></div>
+</div>
+</section>
+
+<section id="booking" style="background:#08101d; display:none;">
+<h2 class="section-title">BOOK YOUR FLIGHT</h2>
+<p class="section-sub">
+必要事項を入力して予約を完了してください。
+</p>
+
+<div class="flight-box">
+<div class="form-grid">
+<div class="input-group">
+<label>FULL NAME</label>
+<input type="text" placeholder="Your Name">
+</div>
+
+<div class="input-group">
+<label>EMAIL</label>
+<input type="email" placeholder="star@example.com">
+</div>
+
+<div class="input-group">
+<label>PASSPORT ID</label>
+<input type="text" placeholder="ST-000000">
+</div>
+
+<div class="input-group">
+<label>PHONE</label>
+<input type="tel" placeholder="090-1234-5678">
+</div>
+</div>
+
+<button class="btn primary" onclick="completeBooking()">COMPLETE BOOKING</button>
+<div style="margin-top:20px;font-size:1rem;color:#c9d7e8;" id="selectedSeatInfo">Selected Seat: None</div>
+<div id="bookingMessage" style="margin-top:25px;font-size:1.2rem;color:#7dd3fc;font-weight:700;"></div>
+</div>
+</section>
+
+<footer>
+© 2026 STAR AIRLINES / STAR EMPIRE
+</footer>
+
+<button class="top-btn" id="topBtn">↑</button>
+
+<script>
+function searchFlights(){
+const from=document.getElementById('from').value;
+const to=document.getElementById('to').value;
+const classMultiplier=parseInt(document.getElementById('class').value);
+const className=document.getElementById('class').options[document.getElementById('class').selectedIndex].text;
+const passengers=parseInt(document.getElementById('passengers').value);
+const results=document.getElementById('results');
+
+const destinations={
+'STAR CITY':0,
+'NEO TOKYO':12000,
+'LUNA PORT':55000,
+'MARS GATE':120000,
+'SKYHARBOR':24000,
+'NOVA ISLAND':36000,
+'AURORA BAY':42000,
+'ORBIT TERMINAL':180000
+};
+
+const base=Math.abs(destinations[from]-destinations[to])+18000;
+const total=base*classMultiplier*passengers;
+
+results.style.display='block';
+results.innerHTML=`
+<div class="flight-result">
+<div>
+<h3>SA-${Math.floor(Math.random()*900+100)}</h3>
+<p>${from} → ${to}</p>
+<p>${className} / ${passengers} Passenger(s)</p>
+</div>
+<div>
+<p>Departure: 08:30</p>
+<p>Arrival: 12:15</p>
+</div>
+<div>
+<h3>¥${total.toLocaleString()}</h3>
+<button class="btn primary" onclick="goToSeats()">SELECT SEAT</button>
+</div>
+</div>
+`;
+
+results.scrollIntoView({behavior:'smooth'});
+}
+
+function goToSeats(){
+document.getElementById('seats').scrollIntoView({behavior:'smooth'});
+
+const reserveArea=document.createElement('div');
+reserveArea.id='seatReserveArea';
+reserveArea.style.marginTop='40px';
+reserveArea.innerHTML=`
+<div style="text-align:center;">
+<button class="btn primary" onclick="openBooking()">CONTINUE TO BOOKING</button>
+</div>
+`;
+
+const aircraft=document.querySelector('.aircraft');
+const existing=document.getElementById('seatReserveArea');
+if(existing) existing.remove();
+aircraft.appendChild(reserveArea);
+}
+
+function openBooking(){
+if(!selectedSeat){
+alert('Please select a seat first.');
+return;
+}
+
+const booking=document.getElementById('booking');
+booking.style.display='block';
+document.getElementById('selectedSeatInfo').innerText='Selected Seat: '+selectedSeat;
+booking.scrollIntoView({behavior:'smooth'});
+}
+
+function completeBooking(){
+if(!selectedSeat){
+alert('Please select a seat.');
+return;
+}
+
+document.getElementById('bookingMessage').innerText='✓ Reservation Complete. Seat '+selectedSeat+' has been reserved. Welcome aboard STAR AIRLINES.';
+
+}
+
+let selectedSeat=null;
+const seatMap=document.getElementById('seatMap');
+const rows=12;
+const cols=['A','B','C','','D','E','F'];
+
+for(let r=1;r<=rows;r++){
+cols.forEach(c=>{
+const seat=document.createElement('div');
+
+if(c===''){
+seat.className='aisle';
+seatMap.appendChild(seat);
+return;
+}
+
+seat.className='seat';
+seat.innerText=r+c;
+
+if(Math.random()<0.2){
+seat.classList.add('occupied');
+}
+
+seat.addEventListener('click',()=>{
+if(seat.classList.contains('occupied')) return;
+
+document.querySelectorAll('.seat.selected').forEach(s=>{
+s.classList.remove('selected');
+});
+
+seat.classList.add('selected');
+selectedSeat=seat.innerText;
+});
+
+seatMap.appendChild(seat);
+});
+}
+
+const topBtn=document.getElementById('topBtn');
+const header=document.getElementById('header');
+const hamburger=document.getElementById('hamburger');
+const mobileMenu=document.getElementById('mobileMenu');
+let lastScroll=0;
+
+window.addEventListener('scroll',()=>{
+if(window.scrollY>300){
+topBtn.style.display='block';
+}else{
+topBtn.style.display='none';
+}
+
+const currentScroll=window.scrollY;
+
+if(currentScroll>lastScroll && currentScroll>100){
+header.style.transform='translateY(-100%)';
+hamburger.style.display='flex';
+}else{
+header.style.transform='translateY(0)';
+hamburger.style.display='none';
+}
+
+lastScroll=currentScroll;
+});
+
+
+
+document.addEventListener('click',(e)=>{
+if(!mobileMenu.contains(e.target) && !hamburger.contains(e.target)){
+mobileMenu.classList.remove('active');
+}
+});
+
+topBtn.addEventListener('click',()=>{
+window.scrollTo({top:0,behavior:'smooth'});
+});
+/* 追加 */
+
+const menuOverlay=document.getElementById('menuOverlay');
+
+hamburger.addEventListener('click',()=>{
+mobileMenu.classList.toggle('active');
+menuOverlay.classList.toggle('active');
+});
+
+menuOverlay.addEventListener('click',()=>{
+mobileMenu.classList.remove('active');
+menuOverlay.classList.remove('active');
+});
+
+document.addEventListener('click',(e)=>{
+if(
+!mobileMenu.contains(e.target) &&
+!hamburger.contains(e.target)
+){
+mobileMenu.classList.remove('active');
+menuOverlay.classList.remove('active');
+}
+});
+</script>
+
+</body>
+</html>
