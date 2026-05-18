@@ -25,6 +25,8 @@ font-family:'Noto Sans JP',sans-serif;
 background:#050816;
 color:white;
 overflow-x:hidden;
+user-select: none;
+  -webkit-user-select: none;
 }
 
 body::-webkit-scrollbar{
@@ -528,10 +530,64 @@ color:#8cc8ff;
 .mobile-menu a:hover::after{
 width:100%;
 }
+#loader{
+position:fixed;
+inset:0;
+background:#050816;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:99999;
+transition:opacity 1s ease, visibility 1s ease;
+}
+
+#loader.hide{
+opacity:0;
+visibility:hidden;
+}
+
+.loader-content{
+text-align:center;
+}
+
+.loader-content h1{
+font-family:'Orbitron',sans-serif;
+font-size:2.5rem;
+margin-top:30px;
+letter-spacing:4px;
+}
+
+.loader-content p{
+margin-top:10px;
+color:#9fb7d8;
+}
+
+.spinner{
+width:90px;
+height:90px;
+border-radius:50%;
+border:5px solid rgba(255,255,255,0.15);
+border-top:5px solid #60a5fa;
+animation:spin 1s linear infinite;
+margin:auto;
+box-shadow:0 0 25px rgba(96,165,250,0.5);
+}
+
+@keyframes spin{
+to{
+transform:rotate(360deg);
+}
+}
 </style>
 </head>
 <body>
-
+<div id="loader">
+<div class="loader-content">
+<div class="spinner"></div>
+<h1>STAR AIRLINES</h1>
+<p>Preparing For Departure...</p>
+</div>
+</div>
 <div class="hamburger" id="hamburger">
 <span></span>
 <span></span>
@@ -543,16 +599,18 @@ width:100%;
 
 <div class="mobile-menu" id="mobileMenu">
 <a href="#home">HOME</a>
+<a href="#about">ABOUT</a>
+<a href="#exp">EXPERIENCE</a>
 <a href="#flights">FLIGHT SEARCH</a>
 <a href="#seats">SEAT MAP</a>
-<a href="#booking">BOOK</a>
 </div>
 
 <div class="mobile-menu" id="mobileMenu">
 <a href="#home">HOME</a>
+<a href="#about">ABOUT</a>
+<a href="#exp">EXPERIENCE</a>
 <a href="#flights">FLIGHT SEARCH</a>
 <a href="#seats">SEAT MAP</a>
-<a href="#booking">BOOK</a>
 </div>
 
 <header id="header">
@@ -563,6 +621,8 @@ width:100%;
 
 <nav>
 <a href="#home">HOME</a>
+<a href="#about">ABOUT</a>
+<a href="#exp">EXPERIENCE</a>
 <a href="#flights">FLIGHT SEARCH</a>
 <a href="#seats">SEAT MAP</a>
 </nav>
@@ -583,7 +643,7 @@ STAR AIRLINES はスター帝国を代表する次世代航空会社です。<br
 </div>
 </section>
 
-<section>
+<section id="about">
 <h2 class="section-title">ABOUT STAR AIRLINES</h2>
 <p class="section-sub">
 STAR AIRLINES はスター帝国最大のフラッグキャリア航空会社です。未来的な機体、世界最高水準のサービス、宇宙港接続ネットワークを備え、帝国内外を結ぶ次世代エアラインとして知られています。
@@ -613,7 +673,7 @@ STAR SPACE と連携し、宇宙港アクセス便も運航しています。
 </div>
 </section>
 
-<section>
+<section id="exp">
 <h2 class="section-title">PREMIUM EXPERIENCE</h2>
 <p class="section-sub">
 快適性・スピード・未来感を融合した、新時代の航空サービス。
@@ -772,6 +832,11 @@ STARJET X‑9 の座席を選択できます。
 <button class="top-btn" id="topBtn">↑</button>
 
 <script>
+window.addEventListener('load',()=>{
+setTimeout(()=>{
+document.getElementById('loader').classList.add('hide');
+},1800);
+});
 function searchFlights(){
 const from=document.getElementById('from').value;
 const to=document.getElementById('to').value;
@@ -835,28 +900,32 @@ aircraft.appendChild(reserveArea);
 }
 
 function openBooking(){
-if(!selectedSeat){
+if(selectedSeats.length===0){
 alert('Please select a seat first.');
 return;
 }
 
 const booking=document.getElementById('booking');
 booking.style.display='block';
-document.getElementById('selectedSeatInfo').innerText='Selected Seat: '+selectedSeat;
+document.getElementById('selectedSeatInfo').innerText=
+'Selected Seat: '+selectedSeats.join(', ');
 booking.scrollIntoView({behavior:'smooth'});
 }
 
 function completeBooking(){
-if(!selectedSeat){
+if(selectedSeats.length===0){
 alert('Please select a seat.');
 return;
 }
 
-document.getElementById('bookingMessage').innerText='✓ Reservation Complete. Seat '+selectedSeat+' has been reserved. Welcome aboard STAR AIRLINES.';
+document.getElementById('bookingMessage').innerText=
+'✓ Reservation Complete. Seat '+
+selectedSeats.join(', ')+
+' has been reserved. Welcome aboard STAR AIRLINES.';
 
 }
 
-let selectedSeat=null;
+let selectedSeats=[];
 const seatMap=document.getElementById('seatMap');
 const rows=12;
 const cols=['A','B','C','','D','E','F'];
@@ -879,16 +948,38 @@ seat.classList.add('occupied');
 }
 
 seat.addEventListener('click',()=>{
+
 if(seat.classList.contains('occupied')) return;
 
-document.querySelectorAll('.seat.selected').forEach(s=>{
-s.classList.remove('selected');
-});
+const passengerCount=parseInt(
+document.getElementById('passengers').value
+);
+
+const seatName=seat.innerText;
+
+if(seat.classList.contains('selected')){
+
+seat.classList.remove('selected');
+
+selectedSeats=selectedSeats.filter(
+s=>s!==seatName
+);
+
+}else{
+
+if(selectedSeats.length >= passengerCount){
+alert('You can only select '+passengerCount+' seats.');
+return;
+}
 
 seat.classList.add('selected');
-selectedSeat=seat.innerText;
-});
+selectedSeats.push(seatName);
 
+}
+
+updateSeatInfo();
+
+});
 seatMap.appendChild(seat);
 });
 }
@@ -943,7 +1034,19 @@ menuOverlay.addEventListener('click',()=>{
 mobileMenu.classList.remove('active');
 menuOverlay.classList.remove('active');
 });
+function updateSeatInfo(){
 
+const info=document.getElementById('selectedSeatInfo');
+
+if(!info) return;
+
+if(selectedSeats.length===0){
+info.innerText='Selected Seat: None';
+}else{
+info.innerText='Selected Seat: '+selectedSeats.join(', ');
+}
+
+}
 document.addEventListener('click',(e)=>{
 if(
 !mobileMenu.contains(e.target) &&
@@ -952,6 +1055,24 @@ if(
 mobileMenu.classList.remove('active');
 menuOverlay.classList.remove('active');
 }
+});
+document.querySelectorAll('.mobile-menu a').forEach(link=>{
+link.addEventListener('click',()=>{
+mobileMenu.classList.remove('active');
+menuOverlay.classList.remove('active');
+});
+});
+document.getElementById('passengers')
+.addEventListener('change',()=>{
+
+selectedSeats=[];
+
+document.querySelectorAll('.seat.selected').forEach(seat=>{
+seat.classList.remove('selected');
+});
+
+updateSeatInfo();
+
 });
 </script>
 
